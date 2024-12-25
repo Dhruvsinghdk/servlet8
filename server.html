@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+   <div align = "center" style="margin: 300px; background-color:grey ; height: 100px; width: 200px; padding: 40px;" >
+    <form action="">
+        Enter Name : <input type="text" name="fname"><br>
+        Enter Password : <input type="password" name="pass"><br>
+
+        <input type="submit" value="Login"> 
+        <input type="submit" value="Cancel">
+    </form>
+   </div>
+
+   <a href=''></a>
+   <button><a href='login.html'>Login</a></button>
+   <button><a href='logout'>Logout</a></button>
+   <button><a href='profile'>Profile</a></button>
+
+   <h3 style="color: green; text-align: center;"></h3>
+
+</body>
+</html>
+
+
+/////////////////////////////////////////////
+
+<!-- Login -->
+package abc;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+
+import jakarta.servlet.RequestDispatcher;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.ServletRequest;
+import jakarta.servlet.ServletResponse;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+
+@WebServlet("/login")
+
+public class login extends HttpServlet {
+
+	@Override
+	public void service(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
+		
+		res.setContentType("text/html");
+		
+		
+		
+		PrintWriter p = res.getWriter();
+		
+		RequestDispatcher r = req.getRequestDispatcher("link.html");
+		r.include(req, res);
+		
+		String name = req.getParameter("fname");
+		String pass = req.getParameter("pass");
+		
+		if(pass.equals("dks")) {
+			p.println("<h3 style='color: green; text-align: center;'>Wecome ...</h3>" + name);
+			
+			HttpSession s=req.getSession();
+			s.setAttribute("saved", name);
+		}
+		else {
+			p.println("<h3 style='color: red; text-align: center;'>Wrong Name</h3>");
+			RequestDispatcher rd = req.getRequestDispatcher("login.html");
+			rd.include(req, res);
+		}
+		
+	}
+
+}
+///////////////////////////////////////////
+<!-- logout -->
+package abc;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+
+import jakarta.servlet.RequestDispatcher;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+
+
+@WebServlet("/logout")
+
+public class Logout extends HttpServlet {
+
+	@Override
+	public void service(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
+		
+res.setContentType("text/html");
+		
+		PrintWriter p = res.getWriter();
+		
+		RequestDispatcher r = req.getRequestDispatcher("link.html");
+		r.include(req, res);
+		
+		HttpSession s = req.getSession();
+		s.invalidate();  // automatically logged out form session
+		
+		p.println("You logged out ");
+	}
+
+}
+<!-- profile -->
+package abc;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+
+import jakarta.servlet.RequestDispatcher;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.ServletRequest;
+import jakarta.servlet.ServletResponse;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.ServletRequest;
+import jakarta.servlet.ServletResponse;
+import jakarta.servlet.http.HttpServlet;
+
+@WebServlet("/profile")
+
+public class profile extends HttpServlet {
+
+	@Override
+	public void service(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
+		
+res.setContentType("text/html");
+		
+		PrintWriter p = res.getWriter();
+		
+		RequestDispatcher r = req.getRequestDispatcher("link.html");
+		r.include(req, res);
+		
+		
+		
+		HttpSession s = req.getSession(false);
+		
+		if(s !=null ) {
+			String name = (String) s.getAttribute("saved");
+			p.println("Welcome to profile page  = "+name);
+		}
+		else {
+			p.println("You need to login");
+		}
+		
+	}
+
+}
+/////////////////////////////////////////////
+<!-- index.html -->
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+
+<a href='login.html'>Login</a>!!
+<a href='profile'>Profile</a>!!
+<a href='logout'>Logout</a>!!
+
+</body>
+</html>
+/////////////////////////////////////
+<!-- login.html -->
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+
+<div align = "center" style="margin: 300px; background-color:grey ; height: 100px; width: 200px; padding: 40px;" >
+    <form action="login">
+        Enter Name : <input type="text" name="fname"><br>
+        Enter Password : <input type="password" name="pass"><br>
+
+        <input type="submit" value="Login"> 
+        <input type="submit" value="Cancel">
+    </form>
+   </div>
+
+</body>
+</html>
+//////////////////////////////////////////////////
+<!-- link.html -->
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+
+<button><a href='login.html'>Login</a></button>
+   <button><a href='logout'>Logout</a></button>
+   <button><a href='profile'>Profile</a></button>
+
+</body>
+</html>
